@@ -1,29 +1,29 @@
 <?php
 /*
-Plugin Name: WSUWP Content Syndicate People
-Plugin URI: https://web.wsu.edu/wordpress/plugins/wsuwp-content-syndicate/
-Description: Retrieve people for display from people.wsu.edu.
-Author: washingtonstateuniversity, jeremyfelt
-Author URI: https://web.wsu.edu/
+Plugin Name: UAMSWP Content Syndication People
+Plugin URI: -
+Description: Retrieve people for display from people.uams.edu.
+Author: uams, Todd McKee, MEd
+Author URI: https://web.uams.edu/
 Version: 1.0.0
 */
 
-namespace WSU\ContentSyndicate\People;
+namespace UAMS\ContentSyndicate\People;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-add_action( 'wsuwp_content_syndicate_shortcodes', 'WSU\ContentSyndicate\People\activate_shortcodes' );
+add_action( 'uamswp_content_syndication_shortcodes', 'UAMS\ContentSyndicate\People\activate_shortcodes' );
 /**
- * Activates the wsuwp_people shortcode.
+ * Activates the uamswp_people shortcode.
  *
  * @since 1.0.0
  */
 function activate_shortcodes() {
-	include_once( dirname( __FILE__ ) . '/includes/class-wsu-syndicate-shortcode-people.php' );
+	include_once( dirname( __FILE__ ) . '/includes/class-uams-syndication-shortcode-people.php' );
 
-	// Add the [wsuwp_people] shortcode to pull calendar events.
-	new \WSU_Syndicate_Shortcode_People();
+	// Add the [uamswp_people] shortcode to pull calendar events.
+	new \UAMS_Syndication_Shortcode_People();
 }
