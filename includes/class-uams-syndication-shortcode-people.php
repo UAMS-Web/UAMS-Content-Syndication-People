@@ -177,7 +177,9 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 							$offset_x++;
 							continue;
 						}
-						?><li class="uamswp_people_item"><a href="<?php echo esc_url( $person->link ); ?>"><?php echo esc_html( $person->title->rendered ); ?></a></li><?php
+						$profile_link = ('physician' === $atts['profile_type'] ? 'http://people.dev/directory/physician/'. esc_html( $person->slug ) : 'http://people.dev/directory/academic/'. esc_html( $person->slug ) );
+						$profile_name = esc_html( $person->person_meta->person_first_name ) .' '. (esc_html( $person->person_meta->person_middle_name ) ? esc_html( $person->person_meta->person_middle_name ) : '') .' '. esc_html( $person->person_meta->person_last_name ) . (esc_html( $person->person_meta->person_degree ) ? ', ' . esc_html( $person->person_meta->person_degree ) : '');
+						?><li class="uamswp_people_item"><a href="<?php echo $profile_link; ?>"><?php echo $profile_name; ?></a></li><?php
 					}
 					?>
 				</ul>
@@ -193,6 +195,8 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 							$offset_x++;
 							continue;
 						}
+						$profile_link = ('physician' === $atts['profile_type'] ? 'http://people.dev/directory/physician/'. esc_html( $person->slug ) : 'http://people.dev/directory/academic/'. esc_html( $person->slug ) );
+						$profile_name = esc_html( $person->person_meta->person_first_name ) .' '. (esc_html( $person->person_meta->person_middle_name ) ? esc_html( $person->person_meta->person_middle_name ) : '') .' '. esc_html( $person->person_meta->person_last_name ) . (esc_html( $person->person_meta->person_degree ) ? ', ' . esc_html( $person->person_meta->person_degree ) : '');
 					?>
 				<div class="uamswp-person-container row" style="border: 1px solid #eee; margin-bottom: 0.5em; padding-top: 0.5em;">
 					<div class="col-md-4">
@@ -200,17 +204,16 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 						<figure class="uamswp-person-photo " style="max-width: 180px;">
 							<img src="<?php echo esc_url( $person->person_meta->pphoto ); ?>" alt="<?php echo esc_html( $person->person_meta->physician_title ); ?>" style="padding-bottom: 0.5em;" />
 						</figure>
-						<div class="uamswp-person-profile"><a class="uams-btn btn-blue btn-sm" target="_self" title="View Profile" href="<?php echo esc_html( $person->link ); ?>">View Profile</a></div>
-	<!-- 					<div class="uamswp-person-youtube"><a class="uams-btn btn-red btn-play btn-sm" target="_self" title="View Physician Video" href="<?php the_field( $person->person_meta->physician_youtube_link ); ?>">View Video</a></div> -->
+						<div class="uamswp-person-profile"><a class="uams-btn btn-blue btn-sm" target="_self" title="View Profile" href="<?php echo $profile_link; ?>">View Profile</a></div>
 						<?php endif; ?>
 					</div>
-					<div class="col-md-6">
-						<div class="uamswp-person-name"><a href="<?php echo esc_html( $person->link ); ?>"><?php echo esc_html( $person->title->rendered ); ?></a></div>
+					<div class="col-md-8">
+						<h3 class="uamswp-person-name"><a href="<?php echo $profile_link; ?>"><?php echo $profile_name; ?></a></h3>
 						<div class="uamswp-person-position"><?php echo esc_html( $person->person_meta->physician_title ); ?></div>
 	 					<div class="uamswp-person-bio"><?php echo esc_html( $person->person_meta->physician_short_clinical_bio ); ?></div>
 						<?php $specialties = $person->person_meta->medical_specialties;
 							if ( $specialties && ! is_wp_error( $specialties ) ) :
-							 	$out = "<h3>Specialties</h3><ul>";
+							 	$out = "<h4>Specialties</h4><ul>";
 
 							    foreach ( $specialties as $specialty ) {
 							       $out .= sprintf( '<li><a href="http://people.dev/specialties/%s">%s</a></li>',$specialty->slug, $specialty->name);
@@ -229,7 +232,7 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 				?>
 			</div><!-- end uamswp-people-wrapper -->
 			<?php
-		} elseif ( 'columns' === $atts['output'] ) {
+		} elseif ( 'columns' === $atts['output'] ) { // ToDo
 			?>
 			<div class="uamswp-people-wrapper">
 				<ul class="uamswp-person-column">
@@ -239,6 +242,8 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 						if ( $offset_x < absint( $atts['offset'] ) ) {
 							$offset_x++;
 							continue;
+						$profile_name = esc_html( $person->person_meta->person_first_name ) .' '. (esc_html( $person->person_meta->person_middle_name ) ? esc_html( $person->person_meta->person_middle_name ) : '') .' '. esc_html( $person->person_meta->person_last_name ) . (esc_html( $person->person_meta->person_degree ) ? ', ' . esc_html( $person->person_meta->person_degree ) : '');
+						$profile_link = ('physician' === $atts['profile_type'] ? 'http://people.dev/directory/physician/'. esc_html( $person->slug ) : 'http://people.dev/directory/academic/'. esc_html( $person->slug ) );
 						}
 						?>
 						<li class="uamswp-content-syndication-item">
@@ -262,11 +267,12 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 							$offset_x++;
 							continue;
 						}
+						$profile_name = esc_html( $person->person_meta->person_first_name ) .' '. (esc_html( $person->person_meta->person_middle_name ) ? esc_html( $person->person_meta->person_middle_name ) : '') .' '. esc_html( $person->person_meta->person_last_name ) . (esc_html( $person->person_meta->person_degree ) ? ', ' . esc_html( $person->person_meta->person_degree ) : '');
 						?>
 						<div class="uamswp-content-syndication-full">
 						        <div class="row">
 							        <div class="col-md-8">
-						                <h1 class="title-heading-left" data-fontsize="34" data-lineheight="48"><?php echo esc_html( $person->person_meta->person_first_name ); ?> <?php echo (esc_html( $person->person_meta->person_middle_name ) ? esc_html( $person->person_meta->person_middle_name ) : ''); ?> <?php esc_html( $person->person_meta->person_last_name ); ?><?php echo (esc_html( $person->person_meta->person_degree ) ? ', ' . esc_html( $person->person_meta->person_degree ) : ''); ?></h1>
+						                <h1 class="title-heading-left" data-fontsize="34" data-lineheight="48"><?php echo $profile_name; ?></h1>
 						                    <?php echo (esc_html( $person->person_meta->physician_title ) ? '<h4>' . esc_html( $person->person_meta->physician_title ) .'</h4>' : ''); ?>
 						            </div>
 									<div class="col-md-4" style="padding-top: 42px;">
@@ -289,7 +295,7 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 						                    <a class="uams-btn btn-blue btn-plus btn-md" target="_self" title="Visit MyChart" href="https://mychart.uamshealth.com/">MyChart</a>
 						                </div>
 						                <?php if( $person->person_meta->physician_npi ) { ?>
-										<div class="ds-summary" data-ds-id="<?php echo esc_url( $person->person_meta->physician_npi ); ?>"></div>
+										<div class="ds-summary" data-ds-id="<?php echo esc_html( $person->person_meta->physician_npi ); ?>"></div>
 										<?php } ?>
 						                <div class="fusion-sep-clear"></div>
 
@@ -480,15 +486,15 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 					                                        <?php foreach ($physician_locations as $physician_location): ?>
 					                                        <li>
 													        <h3><a href="<?php echo esc_url($physician_location->link); ?>"><?php echo esc_html($physician_location->title); ?></a></h3>
-													            <!-- <p><?php the_field('location_address_1'); ?><br/>
-													            <?php echo ( get_field('location_address_2') ? the_field('location_address_2') . '<br/>' : ''); ?>
-													            <?php the_field('location_city'); ?>, <?php the_field('location_state'); ?> <?php the_field('location_zip'); ?><br/>
-													            <?php the_field('location_phone'); ?>
-													            <?php echo ( get_field('location_fax') ? '<br/>Fax: ' . the_field('location_fax') . '' : ''); ?>
-													            <?php echo ( get_field('location_email') ? '<br/><a href="mailto:"' .the_field('location_email') . '">' . the_field('location_email') . '</a>' : ''); ?>
-													            <?php echo ( get_field('location_web_name') ? '<br/><a href="' . get_field( 'location_url') . '">' . get_field('location_web_name') . '</a>' : ''); ?>
-													            <br /><a href="https://www.google.com/maps/dir/Current+Location/<?php echo $map['lat'] ?>,<?php echo $map['lng'] ?>" target="_blank">Directions</a> [Opens in New Window]
-													        </p> -->
+													            <p><?php echo esc_html($physician_location->location_address_1); ?><br/>
+													            <?php echo ( ($physician_location->location_address_2) ? esc_html($physician_location->location_address_2) . '<br/>' : ''); ?>
+													            <?php echo esc_html($physician_location->location_city); ?>, <?php echo esc_html($physician_location->location_state); ?> <?php echo esc_html($physician_location->location_zip); ?><br/>
+													            <?php echo esc_html($physician_location->location_phone); ?>
+													            <?php echo ( ($physician_location->location_fax) ? '<br/>Fax: ' . esc_html($physician_location->location_fax) . '' : ''); ?>
+													            <?php echo ( ($physician_location->location_email) ? '<br/><a href="mailto:"' .esc_html($physician_location->location_email) . '">' . esc_html($physician_location->location_email) . '</a>' : ''); ?>
+													            <?php echo ( ($physician_location->location_web_name) ? '<br/><a href="' . esc_url( $physician_location->location_url) . '">' . esc_html($physician_location->location_web_name) . '</a>' : ''); ?>
+													            <br /><a href="https://www.google.com/maps/dir/Current+Location/<?php echo esc_html($physician_location->location_lat); ?>,<?php echo esc_html($physician_location->location_lng); ?>" target="_blank">Directions</a> [Opens in New Window]
+													        </p>
 					                                        </li>
 													    <?php endforeach; ?>
 					                                    </ol>
@@ -608,7 +614,7 @@ class UAMS_Syndication_Shortcode_People extends UAMS_Syndication_Shortcode_Base 
 										})(jQuery);
 							    	</script>
 								</div>
-							
+
 						</div>
 						<?php
 					}
